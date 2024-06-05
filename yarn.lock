@@ -1514,6 +1514,11 @@ react-router@6.23.1:
   dependencies:
     "@remix-run/router" "1.16.1"
 
+react-simple-keyboard@^3.7.124:
+  version "3.7.124"
+  resolved "https://registry.yarnpkg.com/react-simple-keyboard/-/react-simple-keyboard-3.7.124.tgz#1773076d4d0b69bcf3e328091d003b1aa747d7f0"
+  integrity sha512-gDh88K13QMRJOAv7xzxjDWf4k401j5bsvXve0Ml4hACEUGqx8/S2liUtjphv70dTWw+EiqRvKhiQtWm0PYSh7A==
+
 react@^18.2.0:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"

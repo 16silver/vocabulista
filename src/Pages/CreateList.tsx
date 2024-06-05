@@ -1,6 +1,10 @@
 import styled from "@emotion/styled"
 import { AiOutlineSearch } from "react-icons/ai"
 
+// TODO: add hangul keyboard
+// import Keyboard from "react-simple-keyboard";
+// import 'react-simple-keyboard/build/css/index.css';
+
 import { useNavigate } from 'react-router-dom';
 import { wordList } from "../shared/constants";
 
@@ -133,6 +137,7 @@ function CreateList() {
                         </IconButton>
                         <SearchInput />
                     </SearchContainer>
+                    {/* <Keyboard /> */}
                     <Button onClick={() => navigate('/view_list')}>Crear Lista</Button>
                 </VerticalContainer>
             </HorizontalContainer>
