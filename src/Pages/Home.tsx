@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
 import { useContext, useEffect } from "react";
 import { ContentListContext } from "../shared/contexts/contentList";
-import { FaHome } from "react-icons/fa";
 
 const VerticalContainer = styled.div`
 display: flex;

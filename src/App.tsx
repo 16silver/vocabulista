@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { ContentListContext } from './shared/contexts/contentList'
 import Quiz from './Pages/Quiz'
+import Example from './Pages/Example'
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
     {
         path: "/view_list",
         element: <ViewList />
+    },
+    {
+        path: "/example",
+        element: <Example />
     },
     {
         path: "/quiz",

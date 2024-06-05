@@ -1,6 +1,5 @@
 import styled from "@emotion/styled"
 import { AiOutlineSearch } from "react-icons/ai"
-import { FaHome } from "react-icons/fa";
 
 import { useNavigate } from 'react-router-dom';
 import { wordList } from "../shared/constants";

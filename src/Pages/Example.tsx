@@ -16,7 +16,7 @@ flex-direction: row;
 const TextContainer = styled.div`
 display: flex;
 height: 350px;
-width: 400px;
+width: 500px;
 font-size: 20px;
 flex-direction: row;
 `
@@ -44,24 +44,30 @@ height: 40px;
 const ListContainer = styled.div`
 border: 2px solid black;
 height: 400px;
-width: 500px;
-margin-right: 50px;
+width: 400px;
+margin-left: 50px;
 font-size: 20px;
 text-align: left;
 overflow: scroll;
 `
 
-function ViewList() {
+function Example() {
     const navigate = useNavigate();
-    
+
     return (
         <VerticalContainer>
             <HorizontalContainer>
                 <BackButton onClick={() => navigate(-1)}>←</BackButton>
                 <HomeButton onClick={() => navigate('/home')}>Cartilla</HomeButton>
             </HorizontalContainer>
-            <TitleFont>Lista 1</TitleFont>
+            <TitleFont>Lista 1 - Ejercicio 1</TitleFont>
             <HorizontalContainer>
+                <VerticalContainer>
+                    <TextContainer>
+                        {exampleSentence}
+                    </TextContainer>
+                    <Button onClick={() => navigate('/quiz')}>Prueba</Button>
+                </VerticalContainer>
                 <ListContainer>
                     <ol>
                         {wordList.map((d) => <>
@@ -73,16 +79,9 @@ function ViewList() {
                         )}
                     </ol>
                 </ListContainer>
-                <VerticalContainer>
-                    <TextContainer>
-                        {exampleSentence}
-                    </TextContainer>
-                    <Button onClick={() => navigate('/example')}>Crear Nuevo Ejercicio
-</Button>
-                </VerticalContainer>
             </HorizontalContainer>
         </VerticalContainer>
     )
 }
 
-export default ViewList;
+export default Example;
