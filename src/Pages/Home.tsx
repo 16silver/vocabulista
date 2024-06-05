@@ -69,7 +69,7 @@ function Home() {
                 <BackButton onClick={() => navigate(-1)}>←</BackButton>
                 <HomeButton onClick={() => navigate('/home')}>Cartilla</HomeButton>
             </HorizontalContainer>
-            <ContentFont>You are in a {streak.currentCount} day streak!</ContentFont>
+            <ContentFont>¡Estás en una racha de un {streak.currentCount} día!</ContentFont>
             <TitleFont>Mi Cartilla</TitleFont>
             <ListContainer>
                 <ul>

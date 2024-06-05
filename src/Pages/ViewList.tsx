@@ -74,9 +74,6 @@ function ViewList() {
                     </ol>
                 </ListContainer>
                 <VerticalContainer>
-                    <TextContainer>
-                        {exampleSentence}
-                    </TextContainer>
                     <Button onClick={() => navigate('/example')}>Crear Nuevo Ejercicio
 </Button>
                 </VerticalContainer>
