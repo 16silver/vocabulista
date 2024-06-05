@@ -21,9 +21,15 @@ flex-direction: row;
 `
 
 const TitleFont = styled.span`
-font-size: 80px;
+font-size: 70px;
 margin-bottom: 20px;
 font-weight: bolder;
+`
+
+const MiddleTextFont = styled.span`
+font-size: 30px;
+margin-bottom: 10px;
+font-weight: bold;
 `
 
 const Button = styled.button`
@@ -48,9 +54,8 @@ function Quiz() {
                 <BackButton onClick={() => navigate(-1)}>←</BackButton>
                 <HomeButton onClick={() => navigate('/home')}>Cartilla</HomeButton>
             </HorizontalContainer>
-            <TitleFont>
-
-            </TitleFont>
+            <TitleFont>Lista 1 - Ejercicio 1 Prueba</TitleFont>
+            <MiddleTextFont>Tómese todo el tiempo que necesite.</MiddleTextFont>
             <TextContainer>
                 {exampleSentenceWithBlanks}
             </TextContainer>

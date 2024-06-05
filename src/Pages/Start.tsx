@@ -21,7 +21,7 @@ function Start() {
     return (
         <Container>
             <TitleFont>Vocabulista</TitleFont>
-            <StartButton onClick={() => navigate('/home')}>Start</StartButton>
+            <StartButton onClick={() => navigate('/home')}>Empezar</StartButton>
         </Container>
     )
 }

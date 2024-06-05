@@ -17,7 +17,7 @@ flex-direction: row;
 `
 
 const TitleFont = styled.span`
-font-size: 80px;
+font-size: 70px;
 font-weight: bolder;
 margin: 20px;
 `

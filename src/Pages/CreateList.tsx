@@ -19,7 +19,7 @@ flex-direction: row;
 `
 
 const TitleFont = styled.span`
-font-size: 80px;
+font-size: 70px;
 font-weight: bolder;
 margin-bottom: 20px;
 `
@@ -121,13 +121,7 @@ function CreateList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        {wordList.map((d) => <>
-                            <li>{d[0]}: {d[1]}</li>
-                            <ul>
-                                <li>{d[2]}</li>
-                            </ul>
-                            </>
-                        )}
+                        
                     </ol>
                 </ListContainer>
                 <VerticalContainer>
