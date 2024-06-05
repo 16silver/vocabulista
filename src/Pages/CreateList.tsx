@@ -1,7 +1,9 @@
 import styled from "@emotion/styled"
 import { AiOutlineSearch } from "react-icons/ai"
+import { FaHome } from "react-icons/fa";
 
 import { useNavigate } from 'react-router-dom';
+import { wordList } from "../shared/constants";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -10,16 +12,26 @@ flex-direction: column;
 
 const HorizontalContainer = styled.div`
 display: flex;
-flex-direction: column;
+flex-direction: row;
 `
 
 const TitleFont = styled.span`
-font-size: 90px;
+font-size: 80px;
 font-weight: bolder;
-margin: 60px;
+margin-bottom: 20px;
 `
 
 const Button = styled.button`
+`
+
+const BackButton = styled.button`
+height: 40px;
+/* width: 30px; */
+`
+
+const HomeButton = styled.button`
+height: 40px;
+/* width: 30px; */
 `
 
 const SearchContainer = styled.div`
@@ -84,12 +96,37 @@ background: none;
 }
 `
 
+const ListContainer = styled.div`
+border: 2px solid black;
+height: 400px;
+width: 500px;
+margin-right: 50px;
+font-size: 20px;
+text-align: left;
+overflow: scroll;
+`
+
 function CreateList() {
     const navigate = useNavigate()
     return (
         <VerticalContainer>
+            <HorizontalContainer>
+                <BackButton onClick={() => navigate(-1)}>←</BackButton>
+                <HomeButton onClick={() => navigate('/home')}>Cartilla</HomeButton>
+            </HorizontalContainer>
             <TitleFont>Crear Nueva Lista</TitleFont>
             <HorizontalContainer>
+                <ListContainer>
+                    <ol>
+                        {wordList.map((d) => <>
+                            <li>{d[0]}: {d[1]}</li>
+                            <ul>
+                                <li>{d[2]}</li>
+                            </ul>
+                            </>
+                        )}
+                    </ol>
+                </ListContainer>
                 <VerticalContainer>
                     <SearchContainer>
                         <IconButton>

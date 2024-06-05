@@ -1142,6 +1142,16 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
+hangul-js@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/hangul-js/-/hangul-js-0.2.6.tgz#3e552e3a68c76498cf2c7993ca354af7bad4730d"
+  integrity sha512-48axU8LgjCD30FEs66Xc04/8knxMwCMQw0f67l67rlttW7VXT3qRJgQeHmhiuGwWXGvSbk6YM0fhQlcjE1JFQA==
+
+hangul-virtual-keyboard@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hangul-virtual-keyboard/-/hangul-virtual-keyboard-1.0.2.tgz#4972a08c8a8f329a4e8f97005dfc131a46b2b3db"
+  integrity sha512-oiVDK6zZXenb+qw6tx0X33vynhQky8sc9VZKxKAEHkWDcq2hjkNz5Puli5T2JV+iR+MORrbxPqPxen3/YV7OPg==
+
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -1470,6 +1480,14 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-hangul-virtual-keyboard@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-hangul-virtual-keyboard/-/react-hangul-virtual-keyboard-1.0.0.tgz#29f4776798cf4af4c07dd2914e2e730012c7252b"
+  integrity sha512-HkcbDjVuFguKrGCKOre130KaTecz/3yUsoyCDCPcsbYR3hhI466OAINv22Ia6qwpVg3uxdetuCBxAWKbzu8Rgg==
+  dependencies:
+    hangul-js "^0.2.6"
+    hangul-virtual-keyboard "^1.0.2"
 
 react-icons@^5.2.1:
   version "5.2.1"

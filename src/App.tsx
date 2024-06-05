@@ -8,6 +8,8 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
+import { ContentListContext } from './shared/contexts/contentList'
+import Quiz from './Pages/Quiz'
 
 const router = createBrowserRouter([
     {
@@ -25,16 +27,22 @@ const router = createBrowserRouter([
     {
         path: "/view_list",
         element: <ViewList />
+    },
+    {
+        path: "/quiz",
+        element: <Quiz />
     }
 ]);
 
 function App() {
-    // const [count, setCount] = useState(0)
-
+    const [contentList, setContentList] = useState<string[]>(["Lista 1, 4 palabras, 오늘은 간단한 수학문제를 ..."]);
     return (
-        <>
+        <ContentListContext.Provider value = {{
+            contentList,
+            setContentList,
+        }}>
             <RouterProvider router={router} />
-        </>
+        </ContentListContext.Provider>
     )
 }
 
