@@ -1,7 +1,10 @@
 import styled from "@emotion/styled"
 
 import { useNavigate } from "react-router-dom";
-import { wordList, exampleSentence } from "../shared/constants";
+import { useContext } from "react";
+import { WordListContext } from "../shared/contexts/wordList";
+import { GeneratedTextContext } from "../shared/contexts/generatedText";
+import { generateTextFromWords } from "../Components/ChatGPT";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -53,6 +56,21 @@ overflow: scroll;
 
 function ViewList() {
     const navigate = useNavigate();
+
+    const wordListContext = useContext(WordListContext);
+    const generatedTextContext = useContext(GeneratedTextContext);
+
+    function getGeneratedText() {
+        const wordTextList: string[] = wordListContext.wordList.map(([firstElement]) => firstElement);
+        const resp = generateTextFromWords(wordTextList);
+
+        resp.then((value) => {
+            console.log(value);
+            if (value !== '') {
+                generatedTextContext.setGeneratedText(value);
+            }
+        })
+    }
     
     return (
         <VerticalContainer>
@@ -64,7 +82,7 @@ function ViewList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        {wordList.map((d) => <>
+                        {wordListContext.wordList.map((d) => <>
                             <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
                                 <li>{d[3]}</li>
@@ -74,7 +92,7 @@ function ViewList() {
                     </ol>
                 </ListContainer>
                 <VerticalContainer>
-                    <Button onClick={() => navigate('/example')}>Crear Nuevo Ejercicio
+                    <Button onClick={() => {getGeneratedText(); navigate('/example')}}>Crear Nuevo Ejercicio
 </Button>
                 </VerticalContainer>
             </HorizontalContainer>

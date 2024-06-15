@@ -7,8 +7,9 @@ import styled from "@emotion/styled"
 
 import { useNavigate } from 'react-router-dom';
 import { getWordInfo } from '../Components/ChatGPT';
-import { ComponentProps, useState, useEffect, useRef } from "react";
+import { ComponentProps, useState, useEffect, useRef, useContext } from "react";
 import { HangulImeInputWrapper } from "mole-virtual-keyboard";
+import { WordListContext } from "../shared/contexts/wordList";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -70,7 +71,7 @@ function CreateList() {
 
     const [currentWord, setCurrentWord] = useState("");
 
-    const [wordList, setWordList] = useState<string[][]>([]);
+    const wordListContext = useContext(WordListContext);
 
     const handleCurrentWord: ComponentProps<'input'>['onChange'] = (event) => {
         // console.log(event.target.value);
@@ -82,9 +83,9 @@ function CreateList() {
         resp.then((value) => {
             // console.log(value);
             if (value !== '') {
-                const parts: string[] = value.split(", ");
+                const parts: string[] = value.split(" / ");
                 if(parts.length == 3){
-                    wordList.push([currentWord, ...parts]);
+                    wordListContext.wordList.push([currentWord, ...parts]);
                 }
             }
             event.preventDefault();
@@ -109,7 +110,7 @@ function CreateList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        {wordList.map((d) => <>
+                        {wordListContext.wordList.map((d) => <>
                             <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
                                 <li>{d[3]}</li>

@@ -9,8 +9,10 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import { ContentListContext } from './shared/contexts/contentList'
+import { WordListContext } from './shared/contexts/wordList'
 import Quiz from './Pages/Quiz'
 import Example from './Pages/Example'
+import { GeneratedTextContext } from './shared/contexts/generatedText'
 
 const router = createBrowserRouter([
     {
@@ -41,12 +43,24 @@ const router = createBrowserRouter([
 
 function App() {
     const [contentList, setContentList] = useState<string[]>(["Lista 1, 4 palabras, 오늘은 간단한 수학문제를 ..."]);
+    const [wordList, setWordList] = useState<string[][]>([]);
+    const [generatedText, setGeneratedText] = useState<string>("");
     return (
         <ContentListContext.Provider value = {{
             contentList,
             setContentList,
         }}>
-            <RouterProvider router={router} />
+            <WordListContext.Provider value = {{
+                wordList,
+                setWordList,
+            }}>
+                <GeneratedTextContext.Provider value = {{
+                    generatedText,
+                    setGeneratedText,
+                }}>
+                    <RouterProvider router={router} />
+                </GeneratedTextContext.Provider>
+            </WordListContext.Provider>
         </ContentListContext.Provider>
     )
 }

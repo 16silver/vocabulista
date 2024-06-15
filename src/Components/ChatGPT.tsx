@@ -7,8 +7,9 @@ function getQueryFromWords(words: string[]) {
 }
 
 function getQueryForWordInfo(word: string) {
-    const headText = 'provide romanization with dash seperation, part of speech, meaning of a korean word ';
-    const tailText = ' in spanish. no other text required.'
+    console.log(word);
+    const headText = 'provide followings of a korean word ';
+    const tailText = ' in spanish: romanization with dash seperation, part of speech, meaning. Use slash instead of dash, and no other text is required.'
     return headText + word + tailText;
 }
 

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
 import { useContext, useEffect } from "react";
 import { ContentListContext } from "../shared/contexts/contentList";
+import { WordListContext } from "../shared/contexts/wordList";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -57,9 +58,10 @@ function load_streak(currentDate: Date) {
 
 function Home() {
     const navigate = useNavigate();
-    const listContext = useContext(ContentListContext)
+    const listContext = useContext(ContentListContext);
+    const wordListContext = useContext(WordListContext);
     const streak = load_streak(new Date());
-    console.log(streak)
+    // console.log(streak)
     useEffect(() => {
         window.sessionStorage.setItem('streak', JSON.stringify(streak));
     }, [streak]);
@@ -76,7 +78,7 @@ function Home() {
                     {listContext.contentList.map((d) => <li>{d}</li>)}
                 </ul>
             </ListContainer>
-            <CreateButton onClick={() => navigate('/create_list')}>Crear Nueva Lista</CreateButton>
+            <CreateButton onClick={() => {wordListContext.setWordList([]); navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
         </VerticalContainer>
     )
 }
