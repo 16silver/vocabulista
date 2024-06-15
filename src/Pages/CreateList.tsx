@@ -1,12 +1,14 @@
 import styled from "@emotion/styled"
-import { AiOutlineSearch } from "react-icons/ai"
+// import { AiOutlineSearch } from "react-icons/ai"
 
-// TODO: add hangul keyboard
 // import Keyboard from "react-simple-keyboard";
+// import Keyboard from "hangul-virtual-keyboard";
 // import 'react-simple-keyboard/build/css/index.css';
 
 import { useNavigate } from 'react-router-dom';
-import { wordList } from "../shared/constants";
+import { getWordInfo } from '../Components/ChatGPT';
+import { ComponentProps, useState, useEffect, useRef } from "react";
+import { HangulImeInputWrapper } from "mole-virtual-keyboard";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -37,66 +39,10 @@ height: 40px;
 /* width: 30px; */
 `
 
-const SearchContainer = styled.div`
-position: relative;
-width: 360px;
-height: 40px;
-background: #f2f2f2;
-border-radius: 0;
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding-left: 5px;
-transition: all 0.3s ease;
-margin: 40px;
+const Label = styled.label`
 `
 
-const SearchInput = styled.input`
-padding-left: 48px;
-border: none;
-position: absolute;
-top: 0;
-left: 0;
-height: 100%;
-width: 100%;
-background-color: transparent;
-outline: none;
-font-size: 16px;
-border: 1px solid transparent;
-&:focus {
-    border-color: rgba(0,0,0,0.3);
-}
-`
-
-const IconButton = styled.button`
-position: relative;
-height: 36px;
-width: 36px;
-border: none;
-z-index: 1;
-cursor: pointer;
-background: none;
-
-&:hover {
-    color: white;
-    &::after {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-&::after{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    border-radius: 50%;
-    z-index: -1;
-    background: #000000;
-    transition: 0.2s ease;
-    transform: scale(0.6);
-    opacity: 0;
-}
+const InputContainer = styled.input`
 `
 
 const ListContainer = styled.div`
@@ -109,8 +55,50 @@ text-align: left;
 overflow: scroll;
 `
 
+const KeyboardContainer = styled.div`
+width: 500px;
+`
+
+const KeyboardButton = styled.button`
+font-weight: bold;
+`
+
+let inputWrapper: HangulImeInputWrapper | undefined = undefined;
+
 function CreateList() {
     const navigate = useNavigate()
+
+    const [currentWord, setCurrentWord] = useState("");
+
+    const [wordList, setWordList] = useState<string[][]>([]);
+
+    const handleCurrentWord: ComponentProps<'input'>['onChange'] = (event) => {
+        // console.log(event.target.value);
+        setCurrentWord(event.target.value);
+    };
+
+    const handleWordInfo: ComponentProps<'button'>['onClick'] = (event) => {
+        const resp = getWordInfo(currentWord);
+        resp.then((value) => {
+            // console.log(value);
+            if (value !== '') {
+                const parts: string[] = value.split(", ");
+                if(parts.length == 3){
+                    wordList.push([currentWord, ...parts]);
+                }
+            }
+            event.preventDefault();
+            setCurrentWord("");
+            // console.log(currentWord);
+        });
+    };
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (!inputRef.current) return;
+        inputWrapper = new HangulImeInputWrapper(inputRef.current)
+    }, []);
+
     return (
         <VerticalContainer>
             <HorizontalContainer>
@@ -121,17 +109,40 @@ function CreateList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        
+                        {wordList.map((d) => <>
+                            <li>{d[0]} ({d[1]}) | {d[2]}</li>
+                            <ul>
+                                <li>{d[3]}</li>
+                            </ul>
+                            </>
+                        )}
                     </ol>
                 </ListContainer>
                 <VerticalContainer>
-                    <SearchContainer>
+                    <Label>
+                        <InputContainer ref={inputRef} value={currentWord} onChange={handleCurrentWord}/>
+                        <Button onClick={handleWordInfo}>Add</Button>
+                    </Label>
+                    {/* <SearchContainer>
                         <IconButton>
                             <AiOutlineSearch size={22} />
                         </IconButton>
                         <SearchInput />
-                    </SearchContainer>
-                    {/* <Keyboard /> */}
+                    </SearchContainer> */}
+                    <KeyboardContainer>
+                        {"ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ".split("").map((val, idx) => {
+                            return (
+                                <KeyboardButton
+                                    key={idx}
+                                    onClick={() => {
+                                        inputWrapper?.insert(val);
+                                    }}
+                                    >
+                                    {val}
+                                </KeyboardButton>
+                            );
+                        })}
+                    </KeyboardContainer>
                     <Button onClick={() => navigate('/view_list')}>Crear Lista</Button>
                 </VerticalContainer>
             </HorizontalContainer>

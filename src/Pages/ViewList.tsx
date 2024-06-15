@@ -65,9 +65,9 @@ function ViewList() {
                 <ListContainer>
                     <ol>
                         {wordList.map((d) => <>
-                            <li>{d[0]}: {d[1]}</li>
+                            <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
-                                <li>{d[2]}</li>
+                                <li>{d[3]}</li>
                             </ul>
                             </>
                         )}

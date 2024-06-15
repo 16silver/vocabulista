@@ -2,39 +2,39 @@ import { differenceInDays } from "date-fns";
 
 export function buildStreakCount(date: Date) {
     return {
-      startDate: date,
-      lastLoginDate: date,
-      currentCount: 1
+        startDate: date,
+        lastLoginDate: date,
+        currentCount: 1
     };
-  }
+}
   
-  export function resetStreakCount(
+export function resetStreakCount(
     _: { startDate: Date; lastLoginDate: Date; currentCount: number },
     date: Date
-  ) {
+) {
     return {
-      startDate: date,
-      lastLoginDate: date,
-      currentCount: 1
+        startDate: date,
+        lastLoginDate: date,
+        currentCount: 1
     };
-  }
+}
   
-  export function incrementStreakCount(currentStreakCount: {
+export function incrementStreakCount(currentStreakCount: {
     startDate: Date;
     lastLoginDate: Date;
     currentCount: number;
-  }) {
+}) {
     return {
-      ...currentStreakCount,
-      currentCount: currentStreakCount.currentCount += 1
+        ...currentStreakCount,
+        currentCount: currentStreakCount.currentCount += 1
     };
-  }
+}
 
-  export function updateStreakCount(currentStreakCount: {
+export function updateStreakCount(currentStreakCount: {
     startDate: Date;
     lastLoginDate: Date;
     currentCount: number;
-  }, currentDate: Date) {
+}, currentDate: Date) {
     const difference = differenceInDays(currentDate, currentStreakCount.lastLoginDate);
     if (difference === 0) {
         return currentStreakCount;
@@ -45,4 +45,4 @@ export function buildStreakCount(date: Date) {
     }
 
     return resetStreakCount(currentStreakCount, currentDate);
-  }
+}

@@ -2,6 +2,9 @@ import styled from "@emotion/styled"
 
 import { useNavigate } from "react-router-dom";
 import { wordList, exampleSentence } from "../shared/constants";
+import { generateTextFromWords } from "../Components/ChatGPT";
+import { useState } from "react";
+import { HighlightedText } from "../Components/HighlightedText";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -53,6 +56,17 @@ overflow: scroll;
 
 function Example() {
     const navigate = useNavigate();
+    const wordTextList = ["예습", "시청하다", "간단한", "만담"]
+    const resp = generateTextFromWords(wordTextList);
+
+    const [sentence, setSentence] = useState(exampleSentence);
+
+    resp.then((value) => {
+        console.log(value);
+        if (value !== '') {
+            setSentence(exampleSentence);
+        }
+    })
 
     return (
         <VerticalContainer>
@@ -64,16 +78,16 @@ function Example() {
             <HorizontalContainer>
                 <VerticalContainer>
                     <TextContainer>
-                        {exampleSentence}
+                        <HighlightedText text={sentence} wordsToHighlight={wordTextList} />
                     </TextContainer>
                     <Button onClick={() => navigate('/quiz')}>Prueba</Button>
                 </VerticalContainer>
                 <ListContainer>
                     <ol>
                         {wordList.map((d) => <>
-                            <li>{d[0]}: {d[1]}</li>
+                            <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
-                                <li>{d[2]}</li>
+                                <li>{d[3]}</li>
                             </ul>
                             </>
                         )}
