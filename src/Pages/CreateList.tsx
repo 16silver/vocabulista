@@ -163,7 +163,11 @@ function CreateList() {
                             inputWrapper?.backspace();
                         }}>⟵</BackspaceButton>
                     </KeyboardContainer>
-                    <Button onClick={() => navigate('/view_list')}>Crear Lista</Button>
+                    <Button onClick={() => {
+                        if(wordListContext.wordList.length !== 0){
+                            navigate('/view_list');
+                        }
+                    }}>Crear Lista</Button>
                 </VerticalContainer>
             </HorizontalContainer>
             

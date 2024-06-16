@@ -16,13 +16,13 @@ display: flex;
 flex-direction: row;
 `
 
-const TextContainer = styled.div`
-display: flex;
-height: 350px;
-width: 400px;
-font-size: 20px;
-flex-direction: row;
-`
+// const TextContainer = styled.div`
+// display: flex;
+// height: 350px;
+// width: 400px;
+// font-size: 20px;
+// flex-direction: row;
+// `
 
 const TitleFont = styled.span`
 font-size: 70px;

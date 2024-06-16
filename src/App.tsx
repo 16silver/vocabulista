@@ -8,7 +8,7 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import { ContentListContext } from './shared/contexts/contentList'
+import { ContentListContext, ContentType } from './shared/contexts/contentList'
 import { WordListContext } from './shared/contexts/wordList'
 import Quiz from './Pages/Quiz'
 import Example from './Pages/Example'
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         element: <CreateList />
     },
     {
-        path: "/view_list",
+        path: "/view_list/",
         element: <ViewList />
     },
     {
@@ -42,7 +42,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const [contentList, setContentList] = useState<string[]>([]);
+    const [contentList, setContentList] = useState<ContentType[]>([{
+        wordList: [], setWordList: (_: string[][]) => {}, generatedText: {easy: "", intermediate: "", hard: ""},
+        setGeneratedText: (_: {easy: string, intermediate: string, hard: string}) => {},
+    }
+    ]);
     const [wordList, setWordList] = useState<string[][]>([]);
     const [generatedText, setGeneratedText] = useState<string>("");
     return (

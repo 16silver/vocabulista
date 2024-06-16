@@ -1,6 +1,5 @@
 import styled from "@emotion/styled"
 import { useNavigate } from "react-router-dom";
-import { exampleSentenceWithBlanks } from "../shared/constants";
 import { useContext, useState } from "react";
 import { GeneratedTextContext } from "../shared/contexts/generatedText";
 import { getQuizTextAndAnswer } from "../Components/QuizComponent";

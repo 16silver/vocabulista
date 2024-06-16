@@ -37,15 +37,27 @@ height: 40px;
 /* width: 30px; */
 `
 
-const HomeButton = styled.button`
-height: 40px;
-/* width: 30px; */
-`
+// const HomeButton = styled.button`
+// height: 40px;
+// /* width: 30px; */
+// `
 
 const ListContainer = styled.div`
 border: 2px solid black;
-height: 200px;
+height: 300px;
+margin-bottom: 30px;
 overflow: scroll;
+`
+
+const UnorderedList = styled.ul`
+list-style-type: none;
+`
+
+const ListItem = styled.li`
+text-align: left;
+`
+
+const ViewListButton = styled.button`
 `
 
 function load_streak(currentDate: Date) {
@@ -58,7 +70,7 @@ function load_streak(currentDate: Date) {
 
 function Home() {
     const navigate = useNavigate();
-    const listContext = useContext(ContentListContext);
+    const contentListContext = useContext(ContentListContext);
     const wordListContext = useContext(WordListContext);
     const streak = load_streak(new Date());
     // console.log(streak)
@@ -74,9 +86,11 @@ function Home() {
             <ContentFont>¡Estás en una racha de un {streak.currentCount} día!</ContentFont>
             <TitleFont>Mi Cartilla</TitleFont>
             <ListContainer>
-                <ul>
-                    {listContext.contentList.map((d) => <li>{d}</li>)}
-                </ul>
+                <UnorderedList>
+                    {contentListContext.contentList.map((d, index) =>
+                        <ListItem><ViewListButton onClick={() => navigate(`/view_list/${index}`)}>Lista {index} ({d.wordList.length} palabras)</ViewListButton></ListItem>
+                    )}
+                </UnorderedList>
             </ListContainer>
             <CreateButton onClick={() => {wordListContext.setWordList([]); navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
         </VerticalContainer>
