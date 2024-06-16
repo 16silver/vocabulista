@@ -7,6 +7,8 @@ export type ContentType = {
     setGeneratedText: (_: string) => void,
 }
 
+// export type 
+
 export type ListContext = {
     contentList: string[],
     setContentList: (_: string[]) => void,
