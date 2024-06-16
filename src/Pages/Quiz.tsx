@@ -20,7 +20,7 @@ const TextContainer = styled.div`
 display: flex;
 height: 350px;
 width: 900px;
-font-size: 25px;
+font-size: 20px;
 flex-direction: row;
 `
 
@@ -32,7 +32,7 @@ font-weight: bolder;
 
 const MiddleTextFont = styled.span`
 font-size: 30px;
-margin-bottom: 10px;
+margin-bottom: 5px;
 font-weight: bold;
 `
 
@@ -56,7 +56,7 @@ function Quiz() {
     const wordListContext = useContext(WordListContext);
     const generatedTextContext = useContext(GeneratedTextContext);
 
-    const wordTextList: string[] = wordListContext.wordList.map(([firstElement]) => firstElement);
+    const wordTextList: {word: string, meaning: string}[] = wordListContext.wordList.map((a) => ({word: a[0], meaning: a[3]}));
 
     const quizInfo = getQuizTextAndAnswer(generatedTextContext.generatedText, wordTextList);
     const [answers, setAnswers] = useState<string[]>(quizInfo.quizText.split(' ').map((_) => ''));
@@ -68,8 +68,8 @@ function Quiz() {
     };
 
     const checkAnswers = () => {
-        console.log(answers, quizInfo.answers)
-        const isCorrect = quizInfo.answers.every((answer, index) => answers[answer.id] === answer.text);
+        // console.log(answers, quizInfo.answers);
+        const isCorrect = quizInfo.answers.every((answer) => answers[answer.id] === answer.text);
     
         if (isCorrect) {
           alert('Congratulations! You got all answers correct.');
@@ -98,7 +98,7 @@ function Quiz() {
                             type="text"
                             value={answers[index]}
                             onChange={(event) => handleAnswerChange(index, event)}
-                            style={{ width: '80px', margin: '0 5px' }}
+                            style={{ width: '120px', margin: '0 5px', fontSize: '20px'}}
                         />
                         );
                     }
