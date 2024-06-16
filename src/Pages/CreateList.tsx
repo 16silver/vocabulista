@@ -64,6 +64,16 @@ const KeyboardButton = styled.button`
 font-weight: bold;
 `
 
+const SpaceButton = styled.button`
+font-weight: bold;
+width: 200px;
+`
+
+const BackspaceButton = styled.button`
+font-weight: bold;
+width: 100px;
+`
+
 let inputWrapper: HangulImeInputWrapper | undefined = undefined;
 
 function CreateList() {
@@ -74,16 +84,17 @@ function CreateList() {
     const wordListContext = useContext(WordListContext);
 
     const handleCurrentWord: ComponentProps<'input'>['onChange'] = (event) => {
-        // console.log(event.target.value);
+        // console.log(event.target.value, currentWord);
         setCurrentWord(event.target.value);
     };
 
     const handleWordInfo: ComponentProps<'button'>['onClick'] = (event) => {
+        if (currentWord === '') return;
         const resp = getWordInfo(currentWord);
         resp.then((value) => {
             // console.log(value);
             if (value !== '') {
-                const parts: string[] = value.split(" / ");
+                const parts: string[] = value.split("/").map((s) => s.trim());
                 if(parts.length == 3){
                     wordListContext.wordList.push([currentWord, ...parts]);
                 }
@@ -97,6 +108,7 @@ function CreateList() {
     const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
         if (!inputRef.current) return;
+        inputRef.current.focus();
         inputWrapper = new HangulImeInputWrapper(inputRef.current)
     }, []);
 
@@ -121,8 +133,9 @@ function CreateList() {
                 </ListContainer>
                 <VerticalContainer>
                     <Label>
-                        <InputContainer ref={inputRef} value={currentWord} onChange={handleCurrentWord}/>
-                        <Button onClick={handleWordInfo}>Add</Button>
+                        <InputContainer ref={inputRef} value={currentWord} onChange={handleCurrentWord}
+                        />
+                        <Button onClick={handleWordInfo}>Agregar</Button>
                     </Label>
                     {/* <SearchContainer>
                         <IconButton>
@@ -143,6 +156,12 @@ function CreateList() {
                                 </KeyboardButton>
                             );
                         })}
+                        <SpaceButton onClick={() => {
+                            inputWrapper?.insert(" ");
+                        }}>space</SpaceButton>
+                        <BackspaceButton onClick={() => {
+                            inputWrapper?.backspace();
+                        }}>⟵</BackspaceButton>
                     </KeyboardContainer>
                     <Button onClick={() => navigate('/view_list')}>Crear Lista</Button>
                 </VerticalContainer>

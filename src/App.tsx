@@ -42,7 +42,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const [contentList, setContentList] = useState<string[]>(["Lista 1, 4 palabras, 오늘은 간단한 수학문제를 ..."]);
+    const [contentList, setContentList] = useState<string[]>([]);
     const [wordList, setWordList] = useState<string[][]>([]);
     const [generatedText, setGeneratedText] = useState<string>("");
     return (
