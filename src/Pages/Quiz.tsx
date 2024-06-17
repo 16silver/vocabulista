@@ -1,10 +1,10 @@
 import styled from "@emotion/styled"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { GeneratedTextContext } from "../shared/contexts/generatedText";
 import { getQuizTextAndAnswer } from "../Components/QuizComponent";
-import { WordListContext } from "../shared/contexts/wordList";
 import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
+import { ContentListContext } from "../shared/contexts/contentList";
+import { ErrorComponent } from "../Components/ErrorComponent";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -69,13 +69,27 @@ function updateStreak(currentDate: Date) {
 
 function Quiz() {
     const navigate = useNavigate();
-    
-    const wordListContext = useContext(WordListContext);
-    const generatedTextContext = useContext(GeneratedTextContext);
+    const difficultyLevels = ["easy", "intermediate", "hard"];
 
-    const wordTextList: {word: string, meaning: string}[] = wordListContext.wordList.map((a) => ({word: a[0], meaning: a[3]}));
+    const { id, difficulty } = useParams<{ id: string, difficulty: string }>();
+    const contentListContext = useContext(ContentListContext);
 
-    const quizInfo = getQuizTextAndAnswer(generatedTextContext.generatedText, wordTextList);
+    if(!id || parseInt(id) > contentListContext.contentList.length || parseInt(id) <= 0){
+        return <ErrorComponent />
+    }
+
+    if(!difficulty || !difficultyLevels.includes(difficulty)){
+        return <ErrorComponent />
+    }
+
+    const content = contentListContext.contentList[parseInt(id) - 1];
+    const wordList = content.wordList;
+
+
+    const wordTextList: {word: string, meaning: string}[] = wordList.map((a) => ({word: a[0], meaning: a[3]}));
+
+    console.log(content);
+    const quizInfo = getQuizTextAndAnswer(content.generatedText[difficulty], wordTextList);
     const [answers, setAnswers] = useState<string[]>(quizInfo.quizText.split(' ').map((_) => ''));
 
     const streak = loadStreak();

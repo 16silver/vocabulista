@@ -2,10 +2,9 @@ import styled from "@emotion/styled"
 
 import { useNavigate } from 'react-router-dom';
 
-import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
+import { buildStreakCount } from "../Components/StreakCount";
 import { useContext, useEffect } from "react";
 import { ContentListContext } from "../shared/contexts/contentList";
-import { WordListContext } from "../shared/contexts/wordList";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -71,9 +70,9 @@ function loadStreak() {
 function Home() {
     const navigate = useNavigate();
     const contentListContext = useContext(ContentListContext);
-    const wordListContext = useContext(WordListContext);
     const streak = loadStreak();
     // console.log(streak)
+    // console.log(contentListContext.contentList);
     useEffect(() => {
         window.sessionStorage.setItem('streak', JSON.stringify(streak));
     }, [streak]);
@@ -88,11 +87,11 @@ function Home() {
             <ListContainer>
                 <UnorderedList>
                     {contentListContext.contentList.map((d, index) =>
-                        <ListItem><ViewListButton onClick={() => navigate(`/view_list/${index}`)}>Lista {index} ({d.wordList.length} palabras)</ViewListButton></ListItem>
+                        <ListItem><ViewListButton onClick={() => navigate(`/view_list/${index + 1}`)}>Lista {index} ({d.wordList.length} palabras)</ViewListButton></ListItem>
                     )}
                 </UnorderedList>
             </ListContainer>
-            <CreateButton onClick={() => {wordListContext.setWordList([]); navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
+            <CreateButton onClick={() => {navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
         </VerticalContainer>
     )
 }

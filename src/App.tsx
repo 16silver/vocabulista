@@ -9,10 +9,8 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import { ContentListContext, ContentType } from './shared/contexts/contentList'
-import { WordListContext } from './shared/contexts/wordList'
 import Quiz from './Pages/Quiz'
 import Example from './Pages/Example'
-import { GeneratedTextContext } from './shared/contexts/generatedText'
 
 const router = createBrowserRouter([
     {
@@ -28,39 +26,27 @@ const router = createBrowserRouter([
         element: <CreateList />
     },
     {
-        path: "/view_list/",
+        path: "/view_list/:id",
         element: <ViewList />
     },
     {
-        path: "/example",
+        path: "/example/:id/:difficulty",
         element: <Example />
     },
     {
-        path: "/quiz",
+        path: "/quiz/:id/:difficulty",
         element: <Quiz />
     }
 ]);
 
 function App() {
     const [contentList, setContentList] = useState<ContentType[]>([]);
-    const [wordList, setWordList] = useState<string[][]>([]);
-    const [generatedText, setGeneratedText] = useState<string>("");
     return (
         <ContentListContext.Provider value = {{
             contentList,
             setContentList,
         }}>
-            <WordListContext.Provider value = {{
-                wordList,
-                setWordList,
-            }}>
-                <GeneratedTextContext.Provider value = {{
-                    generatedText,
-                    setGeneratedText,
-                }}>
-                    <RouterProvider router={router} />
-                </GeneratedTextContext.Provider>
-            </WordListContext.Provider>
+            <RouterProvider router={router} />
         </ContentListContext.Provider>
     )
 }

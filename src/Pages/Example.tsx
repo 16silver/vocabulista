@@ -1,10 +1,11 @@
 import styled from "@emotion/styled"
 
-import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { HighlightedText } from "../Components/HighlightedText";
-import { WordListContext } from "../shared/contexts/wordList";
-import { GeneratedTextContext } from "../shared/contexts/generatedText";
+import { ContentListContext } from "../shared/contexts/contentList";
+import { ErrorComponent } from "../Components/ErrorComponent";
+import { generateTextFromWords } from "../Components/ChatGPT";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -54,26 +55,60 @@ text-align: left;
 overflow: scroll;
 `
 
-function Example() {
+function Example () {
     const navigate = useNavigate();
+    const difficultyLevels = ["easy", "intermediate", "hard"];
 
-    const wordListContext = useContext(WordListContext);
-    const generatedTextContext = useContext(GeneratedTextContext);
+    const { id, difficulty } = useParams<{ id: string, difficulty: string }>();
+    const contentListContext = useContext(ContentListContext);
 
-    const wordTextList: string[] = wordListContext.wordList.map(([firstElement]) => firstElement);
-    // console.log(wordTextList);
+    if(!id || parseInt(id) > contentListContext.contentList.length || parseInt(id) <= 0){
+        return <ErrorComponent />
+    }
 
-    // const wordTextList = ["예습", "시청하다", "간단한", "만담"]
-    // const resp = generateTextFromWords(wordTextList);
+    if(!difficulty || !difficultyLevels.includes(difficulty)){
+        return <ErrorComponent />
+    }
 
-    // const [sentence, setSentence] = useState(exampleSentence);
+    const content = contentListContext.contentList[parseInt(id) - 1];
+    const wordList = content.wordList;
 
-    // resp.then((value) => {
-    //     console.log(value);
-    //     if (value !== '') {
-    //         setSentence(value);
+    const [ generatedText, setGeneratedText] = useState(content.generatedText[difficulty]);
+
+    const wordTextList: string[] = wordList.map(([firstElement]) => firstElement);
+
+    // function getGeneratedText() {
+    //     if(!difficulty) return;
+    //     const wordTextList: string[] = wordList.map(([firstElement]) => firstElement);
+    //     if(content.generatedText[difficulty] === ""){
+    //         const resp = generateTextFromWords(wordTextList, difficulty);
+    //         resp.then((value) => {
+    //             // console.log(value);
+    //             if (value !== '') {
+    //                 content.generatedText[difficulty] = value;
+    //                 content.setGeneratedText(content.generatedText);
+    //             }
+    //         })
     //     }
-    // })
+    // }
+
+    useEffect(() => {
+        // console.log(contentListContext);
+        const fetchData = async () => {
+            try {
+                const resp = await generateTextFromWords(wordTextList, difficulty);
+                if (resp !== '') {
+                    content.generatedText[difficulty] = resp;
+                    setGeneratedText(content.generatedText[difficulty])
+                }
+            } catch (error) {
+                console.error("Error while getting example: ", error);
+            }
+        };
+        if(content.generatedText[difficulty] === ""){
+            fetchData();
+        }
+    })
 
     return (
         <VerticalContainer>
@@ -81,17 +116,17 @@ function Example() {
                 <BackButton onClick={() => navigate(-1)}>←</BackButton>
                 <HomeButton onClick={() => navigate('/home')}>Cartilla</HomeButton>
             </HorizontalContainer>
-            <TitleFont>Lista 1 - Ejercicio 1</TitleFont>
+            <TitleFont>Lista {id} - Ejercicio 1</TitleFont>
             <HorizontalContainer>
                 <VerticalContainer>
                     <TextContainer>
-                        <HighlightedText text={generatedTextContext.generatedText} wordsToHighlight={wordTextList} />
+                        <HighlightedText text={generatedText} wordsToHighlight={wordTextList} />
                     </TextContainer>
-                    <Button onClick={() => navigate('/quiz')}>Prueba</Button>
+                    <Button onClick={() => navigate(`/quiz/${id}/${difficulty}`)}>Prueba</Button>
                 </VerticalContainer>
                 <ListContainer>
                     <ol>
-                        {wordListContext.wordList.map((d) => <>
+                        {wordList.map((d) => <>
                             <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
                                 <li>{d[3]}</li>

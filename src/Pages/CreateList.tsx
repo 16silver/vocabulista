@@ -9,9 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getWordInfo } from '../Components/ChatGPT';
 import { ComponentProps, useState, useEffect, useRef, useContext } from "react";
 import { HangulImeInputWrapper } from "mole-virtual-keyboard";
-import { WordListContext } from "../shared/contexts/wordList";
 import { ContentListContext } from "../shared/contexts/contentList";
-import { wordList } from "../shared/constants";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -84,7 +82,8 @@ function CreateList() {
     const [currentWord, setCurrentWord] = useState("");
 
     const contentListContext = useContext(ContentListContext);
-    const wordListContext = useContext(WordListContext);
+
+    const [currentWordList, setCurrentWordList] = useState<string[][]>([]);
 
     const handleCurrentWord: ComponentProps<'input'>['onChange'] = (event) => {
         // console.log(event.target.value, currentWord);
@@ -99,7 +98,10 @@ function CreateList() {
             if (value !== '') {
                 const parts: string[] = value.split("/").map((s) => s.trim());
                 if(parts.length == 3){
-                    wordListContext.wordList.push([currentWord, ...parts]);
+                    currentWordList.push([currentWord, ...parts]);
+                }
+                else{
+                    console.log(value, parts);
                 }
             }
             event.preventDefault();
@@ -125,7 +127,7 @@ function CreateList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        {wordListContext.wordList.map((d) => <>
+                        {currentWordList.map((d) => <>
                             <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
                                 <li>{d[3]}</li>
@@ -167,15 +169,15 @@ function CreateList() {
                         }}>⟵</BackspaceButton>
                     </KeyboardContainer>
                     <Button onClick={() => {
-                        if(wordListContext.wordList.length !== 0){
+                        if(currentWordList.length !== 0){
                             contentListContext.contentList.push({
-                                wordList: wordListContext.wordList,
-                                setWordList: wordListContext.setWordList,
+                                wordList: currentWordList,
+                                setWordList: setCurrentWordList,
                                 generatedText: {easy: "", intermediate: "", hard: ""},
                                 setGeneratedText: (_: {easy: string, intermediate: string, hard: string}) => {},
                             })
-                            console.log(contentListContext.contentList);
-                            navigate('/view_list');
+                            const id = contentListContext.contentList.length;
+                            navigate(`/view_list/${id}`);
                         }
                     }}>Crear Lista</Button>
                 </VerticalContainer>

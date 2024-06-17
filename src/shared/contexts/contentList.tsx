@@ -4,11 +4,13 @@ export type ContentType = {
     wordList: string[][],
     setWordList: (_: string[][]) => void,
     generatedText: {
+        [key: string]: string,
         easy: string,
         intermediate: string,
         hard: string,
     },
     setGeneratedText: (_: {
+        [key: string]: string,
         easy: string,
         intermediate: string,
         hard: string,
