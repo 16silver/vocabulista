@@ -1,10 +1,10 @@
 import styled from "@emotion/styled"
-import { useNavigate } from "react-router-dom";
-import { exampleSentenceWithBlanks } from "../shared/constants";
-import { useContext, useState } from "react";
-import { GeneratedTextContext } from "../shared/contexts/generatedText";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { getQuizTextAndAnswer } from "../Components/QuizComponent";
-import { WordListContext } from "../shared/contexts/wordList";
+import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
+import { ContentListContext } from "../shared/contexts/contentList";
+import { ErrorComponent } from "../Components/ErrorComponent";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -50,16 +50,52 @@ height: 40px;
 /* width: 30px; */
 `
 
+function loadStreak() {
+    const item = window.sessionStorage.getItem('streak');
+    if (item != null) {
+        return JSON.parse(item);
+    }
+    return buildStreakCount(new Date("1971-01-01T00:00:00"));
+}
+
+function updateStreak(currentDate: Date) {
+    const item = window.sessionStorage.getItem('streak');
+    if (item != null) {
+        return updateStreakCount(JSON.parse(item), currentDate);
+    }
+    const new_item = buildStreakCount(new Date("1971-01-01T00:00:00"));
+    return updateStreakCount(new_item, currentDate);
+}
+
 function Quiz() {
     const navigate = useNavigate();
-    
-    const wordListContext = useContext(WordListContext);
-    const generatedTextContext = useContext(GeneratedTextContext);
+    const difficultyLevels = ["easy", "intermediate", "hard"];
 
-    const wordTextList: {word: string, meaning: string}[] = wordListContext.wordList.map((a) => ({word: a[0], meaning: a[3]}));
+    const { id, difficulty } = useParams<{ id: string, difficulty: string }>();
+    const contentListContext = useContext(ContentListContext);
 
-    const quizInfo = getQuizTextAndAnswer(generatedTextContext.generatedText, wordTextList);
+    if(!id || parseInt(id) > contentListContext.contentList.length || parseInt(id) <= 0){
+        return <ErrorComponent />
+    }
+
+    if(!difficulty || !difficultyLevels.includes(difficulty)){
+        return <ErrorComponent />
+    }
+
+    const content = contentListContext.contentList[parseInt(id) - 1];
+    const wordList = content.wordList;
+
+
+    const wordTextList: {word: string, meaning: string}[] = wordList.map((a) => ({word: a[0], meaning: a[3]}));
+
+    // console.log(content);
+    const quizInfo = getQuizTextAndAnswer(content.generatedText[difficulty], wordTextList);
     const [answers, setAnswers] = useState<string[]>(quizInfo.quizText.split(' ').map((_) => ''));
+
+    const streak = loadStreak();
+    useEffect(() => {
+        window.sessionStorage.setItem('streak', JSON.stringify(streak));
+    }, [streak]);
 
     const handleAnswerChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const newAnswers = [...answers];
@@ -73,6 +109,7 @@ function Quiz() {
     
         if (isCorrect) {
           alert('¡Felicidades! Obtuviste todas las respuestas correctas.');
+          window.sessionStorage.setItem('streak', JSON.stringify(updateStreak(new Date())));
           navigate('/home');
         } else {
           alert('Lo siento, algunas respuestas son incorrectas. Inténtalo de nuevo.');

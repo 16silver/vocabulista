@@ -2,10 +2,9 @@ import styled from "@emotion/styled"
 
 import { useNavigate } from 'react-router-dom';
 
-import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
+import { buildStreakCount } from "../Components/StreakCount";
 import { useContext, useEffect } from "react";
 import { ContentListContext } from "../shared/contexts/contentList";
-import { WordListContext } from "../shared/contexts/wordList";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -37,31 +36,43 @@ height: 40px;
 /* width: 30px; */
 `
 
-const HomeButton = styled.button`
-height: 40px;
-/* width: 30px; */
-`
+// const HomeButton = styled.button`
+// height: 40px;
+// /* width: 30px; */
+// `
 
 const ListContainer = styled.div`
 border: 2px solid black;
-height: 200px;
+height: 300px;
+margin-bottom: 30px;
 overflow: scroll;
 `
 
-function load_streak(currentDate: Date) {
+const UnorderedList = styled.ul`
+list-style-type: none;
+`
+
+const ListItem = styled.li`
+text-align: left;
+`
+
+const ViewListButton = styled.button`
+`
+
+function loadStreak() {
     const item = window.sessionStorage.getItem('streak');
     if (item != null) {
-        return updateStreakCount(JSON.parse(item), currentDate);
+        return JSON.parse(item);
     }
-    return buildStreakCount(currentDate);
-  }
+    return buildStreakCount(new Date("1971-01-01T00:00:00"));
+}
 
 function Home() {
     const navigate = useNavigate();
-    const listContext = useContext(ContentListContext);
-    const wordListContext = useContext(WordListContext);
-    const streak = load_streak(new Date());
+    const contentListContext = useContext(ContentListContext);
+    const streak = loadStreak();
     // console.log(streak)
+    // console.log(contentListContext.contentList);
     useEffect(() => {
         window.sessionStorage.setItem('streak', JSON.stringify(streak));
     }, [streak]);
@@ -74,11 +85,13 @@ function Home() {
             <ContentFont>¡Estás en una racha de un {streak.currentCount} día!</ContentFont>
             <TitleFont>Mi Cartilla</TitleFont>
             <ListContainer>
-                <ul>
-                    {listContext.contentList.map((d) => <li>{d}</li>)}
-                </ul>
+                <UnorderedList>
+                    {contentListContext.contentList.map((d, index) =>
+                        <ListItem><ViewListButton onClick={() => navigate(`/view_list/${index + 1}`)}>Lista {index} ({d.wordList.length} palabras)</ViewListButton></ListItem>
+                    )}
+                </UnorderedList>
             </ListContainer>
-            <CreateButton onClick={() => {wordListContext.setWordList([]); navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
+            <CreateButton onClick={() => {navigate('/create_list')}}>Crear Nueva Lista</CreateButton>
         </VerticalContainer>
     )
 }

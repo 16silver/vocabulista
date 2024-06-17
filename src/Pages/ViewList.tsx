@@ -1,10 +1,9 @@
 import styled from "@emotion/styled"
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
-import { WordListContext } from "../shared/contexts/wordList";
-import { GeneratedTextContext } from "../shared/contexts/generatedText";
-import { generateTextFromWords } from "../Components/ChatGPT";
+import { ContentListContext } from "../shared/contexts/contentList";
+import { ErrorComponent } from "../Components/ErrorComponent";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -16,13 +15,13 @@ display: flex;
 flex-direction: row;
 `
 
-const TextContainer = styled.div`
-display: flex;
-height: 350px;
-width: 400px;
-font-size: 20px;
-flex-direction: row;
-`
+// const TextContainer = styled.div`
+// display: flex;
+// height: 350px;
+// width: 400px;
+// font-size: 20px;
+// flex-direction: row;
+// `
 
 const TitleFont = styled.span`
 font-size: 70px;
@@ -76,21 +75,20 @@ const RadioButton = styled.input`
 function ViewList() {
     const navigate = useNavigate();
 
-    const wordListContext = useContext(WordListContext);
-    const generatedTextContext = useContext(GeneratedTextContext);
-    const [difficulty, setDifficulty] = useState("intermediate");
+    const { id } = useParams<{ id: string }>();
+    const contentListContext = useContext(ContentListContext);
 
-    function getGeneratedText() {
-        const wordTextList: string[] = wordListContext.wordList.map(([firstElement]) => firstElement);
-        const resp = generateTextFromWords(wordTextList, difficulty);
-
-        resp.then((value) => {
-            // console.log(value);
-            if (value !== '') {
-                generatedTextContext.setGeneratedText(value);
-            }
-        })
+    if(!id || parseInt(id) > contentListContext.contentList.length || parseInt(id) <= 0){
+        return <ErrorComponent />
     }
+
+    const content = contentListContext.contentList[parseInt(id) - 1];
+    const wordList = content.wordList;
+    const [generatedText, setGeneratedText] = useState(content.generatedText);
+    content.generatedText = generatedText;
+    content.setGeneratedText = setGeneratedText;
+
+    const [difficulty, setDifficulty] = useState("intermediate");
 
     const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDifficulty(event.target.value);
@@ -106,7 +104,7 @@ function ViewList() {
             <HorizontalContainer>
                 <ListContainer>
                     <ol>
-                        {wordListContext.wordList.map((d) => <>
+                        {wordList.map((d) => <>
                             <li>{d[0]} ({d[1]}) | {d[2]}</li>
                             <ul>
                                 <li>{d[3]}</li>
@@ -134,7 +132,7 @@ function ViewList() {
                             Difícil
                         </RadioLabel>
                     </RadioContainer>
-                    <Button onClick={() => {getGeneratedText(); navigate('/example')}}>Crear Nuevo Ejercicio
+                    <Button onClick={() => {navigate(`/example/${id}/${difficulty}`)}}>Crear Nuevo Ejercicio
 </Button>
                 </VerticalContainer>
             </HorizontalContainer>

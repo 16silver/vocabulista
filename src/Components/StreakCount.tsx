@@ -4,7 +4,7 @@ export function buildStreakCount(date: Date) {
     return {
         startDate: date,
         lastLoginDate: date,
-        currentCount: 1
+        currentCount: 0
     };
 }
   

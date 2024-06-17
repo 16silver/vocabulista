@@ -17,7 +17,7 @@ function getQueryForWordInfo(word: string) {
 
 export async function generateTextFromWords(words: Array<string>, difficulty: string) : Promise<string> {
     try {
-        // console.log("Using ChatGPT for text generation...");
+        console.log("Using ChatGPT for text generation...");
         const response = await axios.post(
             'https://api.openai.com/v1/chat/completions',
             {
