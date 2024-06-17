@@ -60,19 +60,19 @@ text-align: left;
 const ViewListButton = styled.button`
 `
 
-function load_streak(currentDate: Date) {
+function loadStreak() {
     const item = window.sessionStorage.getItem('streak');
     if (item != null) {
-        return updateStreakCount(JSON.parse(item), currentDate);
+        return JSON.parse(item);
     }
-    return buildStreakCount(currentDate);
-  }
+    return buildStreakCount(new Date("1971-01-01T00:00:00"));
+}
 
 function Home() {
     const navigate = useNavigate();
     const contentListContext = useContext(ContentListContext);
     const wordListContext = useContext(WordListContext);
-    const streak = load_streak(new Date());
+    const streak = loadStreak();
     // console.log(streak)
     useEffect(() => {
         window.sessionStorage.setItem('streak', JSON.stringify(streak));

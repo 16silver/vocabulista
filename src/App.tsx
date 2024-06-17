@@ -42,11 +42,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const [contentList, setContentList] = useState<ContentType[]>([{
-        wordList: [], setWordList: (_: string[][]) => {}, generatedText: {easy: "", intermediate: "", hard: ""},
-        setGeneratedText: (_: {easy: string, intermediate: string, hard: string}) => {},
-    }
-    ]);
+    const [contentList, setContentList] = useState<ContentType[]>([]);
     const [wordList, setWordList] = useState<string[][]>([]);
     const [generatedText, setGeneratedText] = useState<string>("");
     return (

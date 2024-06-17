@@ -10,6 +10,8 @@ import { getWordInfo } from '../Components/ChatGPT';
 import { ComponentProps, useState, useEffect, useRef, useContext } from "react";
 import { HangulImeInputWrapper } from "mole-virtual-keyboard";
 import { WordListContext } from "../shared/contexts/wordList";
+import { ContentListContext } from "../shared/contexts/contentList";
+import { wordList } from "../shared/constants";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -81,6 +83,7 @@ function CreateList() {
 
     const [currentWord, setCurrentWord] = useState("");
 
+    const contentListContext = useContext(ContentListContext);
     const wordListContext = useContext(WordListContext);
 
     const handleCurrentWord: ComponentProps<'input'>['onChange'] = (event) => {
@@ -165,6 +168,13 @@ function CreateList() {
                     </KeyboardContainer>
                     <Button onClick={() => {
                         if(wordListContext.wordList.length !== 0){
+                            contentListContext.contentList.push({
+                                wordList: wordListContext.wordList,
+                                setWordList: wordListContext.setWordList,
+                                generatedText: {easy: "", intermediate: "", hard: ""},
+                                setGeneratedText: (_: {easy: string, intermediate: string, hard: string}) => {},
+                            })
+                            console.log(contentListContext.contentList);
                             navigate('/view_list');
                         }
                     }}>Crear Lista</Button>

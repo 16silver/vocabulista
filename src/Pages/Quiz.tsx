@@ -1,9 +1,10 @@
 import styled from "@emotion/styled"
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GeneratedTextContext } from "../shared/contexts/generatedText";
 import { getQuizTextAndAnswer } from "../Components/QuizComponent";
 import { WordListContext } from "../shared/contexts/wordList";
+import { buildStreakCount, updateStreakCount } from "../Components/StreakCount";
 
 const VerticalContainer = styled.div`
 display: flex;
@@ -49,6 +50,23 @@ height: 40px;
 /* width: 30px; */
 `
 
+function loadStreak() {
+    const item = window.sessionStorage.getItem('streak');
+    if (item != null) {
+        return JSON.parse(item);
+    }
+    return buildStreakCount(new Date("1971-01-01T00:00:00"));
+}
+
+function updateStreak(currentDate: Date) {
+    const item = window.sessionStorage.getItem('streak');
+    if (item != null) {
+        return updateStreakCount(JSON.parse(item), currentDate);
+    }
+    const new_item = buildStreakCount(new Date("1971-01-01T00:00:00"));
+    return updateStreakCount(new_item, currentDate);
+}
+
 function Quiz() {
     const navigate = useNavigate();
     
@@ -59,6 +77,11 @@ function Quiz() {
 
     const quizInfo = getQuizTextAndAnswer(generatedTextContext.generatedText, wordTextList);
     const [answers, setAnswers] = useState<string[]>(quizInfo.quizText.split(' ').map((_) => ''));
+
+    const streak = loadStreak();
+    useEffect(() => {
+        window.sessionStorage.setItem('streak', JSON.stringify(streak));
+    }, [streak]);
 
     const handleAnswerChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const newAnswers = [...answers];
@@ -72,6 +95,7 @@ function Quiz() {
     
         if (isCorrect) {
           alert('Congratulations! You got all answers correct.');
+          window.sessionStorage.setItem('streak', JSON.stringify(updateStreak(new Date())));
           navigate('/home');
         } else {
           alert('Sorry, some answers are incorrect. Please try again.');
