@@ -88,7 +88,7 @@ function Quiz() {
 
     const wordTextList: {word: string, meaning: string}[] = wordList.map((a) => ({word: a[0], meaning: a[3]}));
 
-    console.log(content);
+    // console.log(content);
     const quizInfo = getQuizTextAndAnswer(content.generatedText[difficulty], wordTextList);
     const [answers, setAnswers] = useState<string[]>(quizInfo.quizText.split(' ').map((_) => ''));
 
