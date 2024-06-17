@@ -108,11 +108,11 @@ function Quiz() {
         const isCorrect = quizInfo.answers.every((answer) => answers[answer.id] === answer.text);
     
         if (isCorrect) {
-          alert('Congratulations! You got all answers correct.');
+          alert('¡Felicidades! Obtuviste todas las respuestas correctas.');
           window.sessionStorage.setItem('streak', JSON.stringify(updateStreak(new Date())));
           navigate('/home');
         } else {
-          alert('Sorry, some answers are incorrect. Please try again.');
+          alert('Lo siento, algunas respuestas son incorrectas. Inténtalo de nuevo.');
         }
     };
     
